@@ -1,1 +1,7 @@
-.venv
+.venv/
+data/raw/
+data/landmarks/
+mlruns/
+hand_landmarker.task
+__pycache__/
+*.pyc
