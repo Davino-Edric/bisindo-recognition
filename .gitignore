@@ -5,3 +5,5 @@ mlruns/
 hand_landmarker.task
 __pycache__/
 *.pyc
+best_model.pth
+mlflow.db
