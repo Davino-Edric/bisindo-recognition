@@ -30,9 +30,9 @@ def load_model(model_path,label_map_path):
     return model, label_map
 
 def predict(frame, model, label_map):
-    rgb      = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
-    result   = detector.detect(mp_image)
+    result = detector.detect(mp_image)
 
     if not result.hand_landmarks:
         return None, None
@@ -42,14 +42,14 @@ def predict(frame, model, label_map):
         label  = result.handedness[i][0].display_name
         hand_vectors[label] = normalize(hand_landmarks)
 
-    right  = hand_vectors.get("Right", np.zeros(63))
-    left   = hand_vectors.get("Left",  np.zeros(63))
+    right = hand_vectors.get("Right", np.zeros(63))
+    left = hand_vectors.get("Left",  np.zeros(63))
     vector = np.concatenate([right, left])
 
     with torch.no_grad():
-        tensor         = torch.tensor(vector, dtype=torch.float32).unsqueeze(0)
-        output         = model(tensor)
-        predicted_idx  = torch.argmax(output, dim=1).item()
+        tensor = torch.tensor(vector, dtype=torch.float32).unsqueeze(0)
+        output = model(tensor)
+        predicted_idx = torch.argmax(output, dim=1).item()
         predicted_letter = label_map.get(str(predicted_idx), "?")
 
     return predicted_letter, vector
